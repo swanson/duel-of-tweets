@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 import re
-from db.document import OutgoingTweet
+from db.document import *
 from datetime import datetime
 from mongoengine import *
+import logging
+import time
+import sys
 
 #remove mentions
 #grab hashtags
@@ -109,31 +112,28 @@ class Decoder(object):
         return is_command, command
 
 if __name__ == '__main__':
-    class MockTweet(object):
-        pass
-    t = MockTweet()
-    t.user = 'BattleofTweets'
-    t.body = '@ShowOfTweets suggest coke vs pepsi'
-    d = Decoder(t)
-    w = Worker(d.command)
-    w.do_work()
-    print d.command.to_tweet_string()
-    d.command.dispatch()
-    print '-----'
+    # start up the default logging
+    logging.basicConfig(level=logging.DEBUG)
 
-    t.body = '@ShowOfTweets pepsi #SOT1234'
-    d = Decoder(t)
-    w = Worker(d.command)
-    w.do_work()
-    print d.command.to_tweet_string()
-    d.command.dispatch()
-    print '-----'
+    # connect to mongodb
+    try:
+        connect('tweet-store')
+    except:
+        logging.critical('couldnt connect to mongodb!')
+        sys.exit(-1)
+    else:
+        logging.info('connected to mongodb')
 
-    t.body = '@ShowOfTweets remove #SOT12312'
-    d = Decoder(t)
-    w = Worker(d.command)
-    w.do_work()
-    print d.command.to_tweet_string()
-    d.command.dispatch()
-    print '-----'
+    while True:
+        t = StoredTweet.objects.first()
+
+        if t is not None:
+            d = Decoder(t)
+            w = Worker(d.command)
+            w.do_work()
+            d.command.dispatch()
+            t.delete()
+
+        # don't overload mongodb
+        time.sleep(0.05)
 

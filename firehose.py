@@ -5,7 +5,7 @@ from datetime import datetime
 from db.document import StoredTweet
 
 connect('tweet-store')
-words = ["@showoftweets", "bieber"]
+words = ["@showoftweets"]
 stream = tweetstream.TrackStream("battleoftweets", "secretpass", words)
 for tweet in stream:
     print "Storing tweet %s" % tweet['text']
