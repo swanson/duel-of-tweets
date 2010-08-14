@@ -12,6 +12,7 @@ class Battle(Document):
     end = DateTimeField()
     suggester = StringField(required = True)
     choices = DictField()
+    active = BooleanField(required = True, default = False)
 
 class OutgoingTweet(Document):
     body = StringField(required = True)

@@ -62,6 +62,9 @@ class Worker(object):
             #create suggested battle
         else:            
             battle = Battle.objects.get(tag = self.command.tag)
+            if not battle.active:
+                print 'battle has ended, you cannot vote anymore'
+                return False
             if self.command.body in battle.choices:
                 if self.command.target not in battle.choices[self.command.body]:
                     battle.choices[self.command.body].append(self.command.target)
@@ -69,6 +72,7 @@ class Worker(object):
                 else:
                     print "already voted"
             print 'adding vote for %s\'s vote for %s' % (self.command.target, self.command.body)
+        return True
 
     def finalize(self):
         pass
@@ -147,8 +151,8 @@ if __name__ == '__main__':
         if t is not None:
             d = Decoder(t)
             w = Worker(d.command)
-            w.do_work()
-            d.command.dispatch()
+            if w.do_work():
+                d.command.dispatch()
             t.delete()
 
         # don't overload mongodb
