@@ -58,9 +58,18 @@ class Worker(object):
                     print 'removing %s\'s vote' % self.command.target
                     break
         elif self.command.cmd_type == 'suggest':
-            print 'adding suggestion', self.command.body
+            choices = self.command.body.split(' or ')
+            if len(choices) != 2:
+                logging.warn("suggestion '%s' couldn't be decoded!" % self.command.body)
+                return False
+            logging.info("adding suggestion '%s' OR '%s'" % (choices[0], choices[1]))
             #create suggested battle
-        else:            
+            s = Suggestion()
+            s.user = self.command.target
+            s.timestamp = datetime.now()
+            s.choices = self.command.body.split(' or ')
+            s.save()
+        else:
             battle = Battle.objects.get(tag = self.command.tag)
             if not battle.active:
                 print 'battle has ended, you cannot vote anymore'
@@ -146,7 +155,7 @@ if __name__ == '__main__':
             def delete(self):
                 pass
         t = Mock()
-        t.body = '@ShowOfTweets remove #bot1'
+        t.body = '@ShowOfTweets suggest justin beiber or justin timberlake'
         t.user = 'BattleOfTweets'
         if t is not None:
             d = Decoder(t)

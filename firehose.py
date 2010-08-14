@@ -29,7 +29,7 @@ if __name__ == "__main__":
     else:
         logging.info('connected to mongodb')
 
-    words = ["@showoftweets", "beiber"]
+    words = ["@showoftweets"]
     stream = tweetstream.TrackStream(config['user'], config['password'], words)
 
     for tweet in stream:

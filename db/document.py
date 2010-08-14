@@ -24,3 +24,9 @@ class OutgoingTweet(Document):
     body = StringField(required = True)
     timestamp = DateTimeField()
 
+class Suggestion(Document):
+    user = StringField(required = True)
+    choices = ListField(StringField(), required = True)
+    timestamp = DateTimeField(required = True)
+
+
