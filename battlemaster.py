@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 import re
+from db.document import OutgoingTweet
+from datetime import datetime
+from mongoengine import *
 
 #remove mentions
 #grab hashtags
@@ -11,6 +14,7 @@ class Command(object):
         self.target = target
         self.body = body
         self.tag = tag
+        connect('tweet-store')
 
     def to_tweet_string(self):
         mention = '@%s' % self.target
@@ -26,6 +30,10 @@ class Command(object):
             return template
         else:
             raise Exception("Too long too tweet")
+
+    def dispatch(self):
+        outgoing = OutgoingTweet(body = self.to_tweet_string(), timestamp = datetime.now())
+        outgoing.save()
 
 class Worker(object):
     def __init__(self, command):
@@ -104,12 +112,13 @@ if __name__ == '__main__':
     class MockTweet(object):
         pass
     t = MockTweet()
-    t.user = 'TestPerson'
+    t.user = 'BattleofTweets'
     t.body = '@ShowOfTweets suggest coke vs pepsi'
     d = Decoder(t)
     w = Worker(d.command)
     w.do_work()
     print d.command.to_tweet_string()
+    d.command.dispatch()
     print '-----'
 
     t.body = '@ShowOfTweets pepsi #SOT1234'
@@ -117,6 +126,7 @@ if __name__ == '__main__':
     w = Worker(d.command)
     w.do_work()
     print d.command.to_tweet_string()
+    d.command.dispatch()
     print '-----'
 
     t.body = '@ShowOfTweets remove #SOT12312'
@@ -124,5 +134,6 @@ if __name__ == '__main__':
     w = Worker(d.command)
     w.do_work()
     print d.command.to_tweet_string()
+    d.command.dispatch()
     print '-----'
 
