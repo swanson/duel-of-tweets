@@ -54,10 +54,11 @@ class Worker(object):
             print 'adding suggestion', self.command.body
             #create suggested battle
         else:
+            print self.command.tag
             battle = Battle.objects.get(tag = self.command.tag)
             if self.command.body in battle.choices:
-                batte.choices[self.command.body].append(self.command.target)
-            battle.choices.save()
+                battle.choices[self.command.body].append(self.command.target)
+                battle.save()
             print 'adding vote for %s\'s vote for %s' % (self.command.target, self.command.body)
 
     def finalize(self):
@@ -96,7 +97,7 @@ class Decoder(object):
         return tags
     
     def validate_hashtag_format(self, tag):
-        valid = re.findall('#SOT[0-9]+', tag, re.I)
+        valid = re.findall('#BOT[0-9]+', tag, re.I)
         if valid:
             return True
         return False

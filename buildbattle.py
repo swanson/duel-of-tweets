@@ -5,7 +5,7 @@ import sys
 
 connect('tweet-store')
 print 'enter tag: '
-tag = sys.stdin.readline()
+tag = sys.stdin.readline().strip()
 print 'enter choices: '
 c = sys.stdin.readline().split(',')
 d = {c[0].strip():[], c[1].strip():[]}
