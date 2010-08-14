@@ -2,7 +2,10 @@
 
 import logging
 import tweepy
-
+from db.document import OutgoingTweet
+from mongoengine import *
+import sys
+import time
 
 class Announcer(object):
     DEFAULT_RETRY_COUNT = 5
@@ -17,9 +20,9 @@ class Announcer(object):
         # switch to oauth after 2010-08-16!
         self.auth = tweepy.BasicAuthHandler(username, password)
         self.api = tweepy.API(
-                self.auth,
-                retry_count=retry_count,
-                retry_delay=retry_delay
+            self.auth,
+            retry_count=retry_count,
+            retry_delay=retry_delay
         )
 
         logging.info("finished Announcer __init__")
@@ -48,6 +51,26 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
     announcer = Announcer("battleoftweets", "secretpass")
-    status = announcer.tweet("hello, world!")
-    print status
+    
+    # connect to mongodb
+    try:
+        connect('tweet-store')
+    except:
+        logging.critical('couldnt connect to mongodb!')
+        sys.exit(-1)
+    else:
+        logging.info('connected to mongodb')
 
+    while True:
+        # due to the default IDs containing a timestamp, this will get
+        # the oldest tweets first
+        tweet = OutgoingTweet.objects.first()
+        if tweet is not None:
+            # found a tweet, try and send it
+            if not announcer.tweet(tweet.body):
+                logging.debug('failed to tweet!')
+            # found tweet, sent it, so get rid of it
+            tweet.delete()
+        # dont piss of twitter, throttle
+        time.sleep(1)
+    
