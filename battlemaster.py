@@ -15,14 +15,14 @@ class Command(object):
     def to_tweet_string(self):
         mention = '@%s' % self.target
         if self.cmd_type == 'results':
-            template = "%s Current results for %s: %s" % (mention, tag, body)
+            template = "%s Current results for %s: %s" % (mention, self.tag, self.body)
         elif self.cmd_type == 'remove':
-            template = "%s Your vote for %s has been removed" % (mention, tag)
+            template = "%s Your vote for %s has been removed" % (mention, self.tag)
         elif self.cmd_type == 'suggest':
             template = "%s thanks for the suggestion!" % (mention)
         else:
-            template = "%s we received your vote for %s" % (mention, body)
-        if len(template < 140):
+            template = "%s we received your vote for %s" % (mention, self.body)
+        if len(template) < 140:
             return template
         else:
             raise Exception("Too long too tweet")
@@ -53,6 +53,7 @@ class Worker(object):
 class Decoder(object):
     def __init__(self, raw_tweet):
         self.tweet = raw_tweet.body
+        print self.tweet
         self.target = raw_tweet.user
         self._decode()
 
@@ -63,12 +64,12 @@ class Decoder(object):
         for tag in tags:
             if self.validate_hashtag_format(tag):
                 valid_tags.append(tag)
-        is_cmd, cmd = self.check_for_commands(self.tweet)
+        is_cmd, cmd = self.check_for_command(self.tweet)
         self.remove_hashtags(self.tweet)
         if not is_cmd:
             cmd = 'vote'
-
-        c = Command(cmd, self.target, self.tweet, valid_tags)
+        
+        self.command = Command(cmd, self.target, self.tweet, valid_tags)
 
     def remove_mentions(self, tweet):
         self.tweet = re.sub('@[\S]+', '', tweet).strip()
@@ -98,4 +99,28 @@ class Decoder(object):
         return is_command, command
 
 if __name__ == '__main__':
-    print 'sup'
+    class MockTweet(object):
+        pass
+    t = MockTweet()
+    t.user = 'TestPerson'
+    t.body = '@ShowOfTweets suggest coke vs pepsi'
+    d = Decoder(t)
+    w = Worker(d.command)
+    w.do_work()
+    print d.command.to_tweet_string()
+    print '-----'
+
+    t.body = '@ShowOfTweets pepsi #SOT1234'
+    d = Decoder(t)
+    w = Worker(d.command)
+    w.do_work()
+    print d.command.to_tweet_string()
+    print '-----'
+
+    t.body = '@ShowOfTweets remove #SOT12312'
+    d = Decoder(t)
+    w = Worker(d.command)
+    w.do_work()
+    print d.command.to_tweet_string()
+    print '-----'
+
