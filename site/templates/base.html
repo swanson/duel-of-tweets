@@ -1,0 +1,34 @@
+<!doctype html public '-//W3C//DTD HTML 4.01//EN'
+  'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+  <head>
+      <title>Title Goes Here</title>
+
+      <script type="text/javascript" src="/static/jquery-1.4.2.js"></script>
+
+      <link rel="stylesheet" href="/static/styles.css" type="text/css">
+
+  </head>
+  <body>
+  <div id="header">
+	<h1>Page title</h1>
+	<ul>
+        <li><a href="/suggestions/">suggestions</a></li>
+        <li><a href="/create/">create</a></li>
+        <li><a href="/results/">results</a></li>
+        <li><a href="/status/">status</a></li>
+	</ul>
+</div>
+<div class="colmask fullpage">
+	<div class="col1">
+		<!-- Column 1 start -->
+        {% block content %}{% endblock %}
+		<!-- Column 1 end -->
+	</div>
+</div>
+<div id="footer">
+Footer goes here
+</div>
+
+</body>
+</html>
