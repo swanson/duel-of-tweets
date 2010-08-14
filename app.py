@@ -39,32 +39,29 @@ def timesince(dt, default="just now"):
 def index():
     return render_template('index.html')
 
-@app.route('/questions/<id>/', methods = ['GET'])
-def question_details(id):
-    question = Question.objects.get(id = id)
-    answer_form = AnswerForm()
-    comment_form = CommentForm()
-    your_vote = 0
-    answer_votes = []
-    if g.user:
-        try:
-            vote = Vote.objects.get(user=g.user, question=question)
-            your_vote = vote.score
-        except:
-            pass
-        try:
-            answer_votes = AnswerVote.objects(user=g.user, answer__in=question.answers)
-        except:
-            pass
-    return render_template('details.html', question = question, 
-                                            title = question.title,
-                                            answer_form = answer_form,
-                                            comment_form = comment_form,
-                                            your_vote = your_vote,
-                                            answer_votes = answer_votes)
+@app.route('/suggestions/')
+def suggestions():
+    return "suggestions"
 
-@app.route('/posts/question/<id>/comment/', methods = ['POST'])
-def add_comment_to_question(id):
+@app.route('/create/')
+def create():
+    return "create"
+
+@app.route('/results/')
+def results():
+    return "results list"
+
+@app.route('/results/<id>')
+def result_details(id):
+    return "results for %s" % id
+
+@app.route('/status/')
+def status():
+    return "status"
+
+@app.route('/posts/duel/', methods = ['POST'])
+def post_duel():
+    return "post duel"
     comment_form = CommentForm(request.form)
     if g.user and comment_form.validate():
         question = Question.objects.get(id = id)
