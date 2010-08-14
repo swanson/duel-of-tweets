@@ -6,19 +6,22 @@ from db.document import OutgoingTweet
 from mongoengine import *
 import sys
 import time
+import json
 
 class Announcer(object):
     DEFAULT_RETRY_COUNT = 5
     DEFAULT_RETRY_DELAY = 0.1
 
-    def __init__(self, username, password,
-            retry_count=DEFAULT_RETRY_COUNT, retry_delay=DEFAULT_RETRY_DELAY):
+    def __init__(self, consumer_key, consumer_secret, access_key, access_secret,
+            retry_count=DEFAULT_RETRY_COUNT,
+            retry_delay=DEFAULT_RETRY_DELAY):
 
 
         logging.info("inside Announcer __init__")
         
         # switch to oauth after 2010-08-16!
-        self.auth = tweepy.BasicAuthHandler(username, password)
+        self.auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        self.auth.set_access_token(access_key, access_secret)
         self.api = tweepy.API(
             self.auth,
             retry_count=retry_count,
@@ -50,8 +53,18 @@ if __name__ == "__main__":
     # start up the default logging
     logging.basicConfig(level=logging.DEBUG)
 
-    announcer = Announcer("battleoftweets", "secretpass")
-    
+    # get the config
+    try:
+        with open('config.json') as cfg:
+            config = json.load(cfg)
+    except:
+        logging.critical('couldnt open config!')
+        sys.exit(-1)
+
+    announcer = Announcer(config['consumer_key'], config['consumer_secret'],
+        config['access_key'], config['access_secret'])
+
+
     # connect to mongodb
     try:
         connect('tweet-store')
