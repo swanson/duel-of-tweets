@@ -1,5 +1,11 @@
 from mongoengine import *
+from wtforms import *
 
+class BattleForm(Form):
+    option1 = TextField("", [validators.Required()])
+    option2 = TextField("", [validators.Required()])
+    tag = TextField("Tags")
+    time_limit = IntField("", [validators.Required()])
 
 class StoredTweet(Document):
     user = StringField(required = True)

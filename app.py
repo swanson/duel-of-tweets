@@ -2,7 +2,7 @@ from flask import Flask, g, session, request, render_template, flash, redirect, 
 from mongoengine import *
 from datetime import datetime
 import json
-
+from db.document import *
 
 app = Flask(__name__)
 app.debug = True
@@ -45,11 +45,12 @@ def suggestions():
 
 @app.route('/create/')
 def create():
-    return "create"
+    return render_template('create.html')
 
 @app.route('/results/')
 def results():
-    return "results list"
+    battles = Battle.objects
+    return render_template('results.html', battles = battles)
 
 @app.route('/results/<id>')
 def result_details(id):
