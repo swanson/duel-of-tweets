@@ -60,16 +60,17 @@ class Decoder(object):
     def _decode(self):
         self.remove_mentions(self.tweet)
         tags = self.get_hashtags(self.tweet)
-        valid_tags = []
+        poll_tag = None
         for tag in tags:
             if self.validate_hashtag_format(tag):
-                valid_tags.append(tag)
+                poll_tag = tag
+                break
         is_cmd, cmd = self.check_for_command(self.tweet)
         self.remove_hashtags(self.tweet)
         if not is_cmd:
             cmd = 'vote'
         
-        self.command = Command(cmd, self.target, self.tweet, valid_tags)
+        self.command = Command(cmd, self.target, self.tweet, poll_tag)
 
     def remove_mentions(self, tweet):
         self.tweet = re.sub('@[\S]+', '', tweet).strip()
@@ -95,6 +96,7 @@ class Decoder(object):
             if match:
                 is_command = True
                 command = cmd
+                self.tweet = re.sub('%s' % cmd, '', tweet, re.I).strip()
                 break
         return is_command, command
 
