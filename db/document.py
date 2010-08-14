@@ -7,6 +7,7 @@ class StoredTweet(Document):
     timestamp = DateTimeField()
 
 class Battle(Document):
+    tag = StringField(required = True, unique = True)
     start = DateTimeField(required = True)
     end = DateTimeField()
     suggester = StringField(required = True)

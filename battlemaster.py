@@ -54,8 +54,10 @@ class Worker(object):
             print 'adding suggestion', self.command.body
             #create suggested battle
         else:
-            #vote?
-            #difflib stuff
+            battle = Battle.objects.get(tag = self.command.tag)
+            if self.command.body in battle.choices:
+                batte.choices[self.command.body].append(self.command.target)
+            battle.choices.save()
             print 'adding vote for %s\'s vote for %s' % (self.command.target, self.command.body)
 
     def finalize(self):
