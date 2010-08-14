@@ -44,21 +44,30 @@ class Worker(object):
 
     def do_work(self):
         if self.command.cmd_type == 'results':
-            self.command.body = 'Coke 51, Pepsi 49'
-            print 'sending results'
-            #query for results
+            battle = Battle.objects.get(tag = self.command.tag)
+            res = []
+            for b in battle.choices:
+                res.append('%s - %s' % (b, len(battle.choices[b])))
+            self.command.body = ", ".join(res)
         elif self.command.cmd_type == 'remove':
-            print 'removing %s\'s vote' % self.command.target
-            #remove vote
+            battle = Battle.objects.get(tag = self.command.tag)
+            for c in battle.choices:
+                if self.command.target in battle.choices[c]:
+                    battle.choices[c].remove(self.command.target)
+                    battle.save()
+                    print 'removing %s\'s vote' % self.command.target
+                    break
         elif self.command.cmd_type == 'suggest':
             print 'adding suggestion', self.command.body
             #create suggested battle
-        else:
-            print self.command.tag
+        else:            
             battle = Battle.objects.get(tag = self.command.tag)
             if self.command.body in battle.choices:
-                battle.choices[self.command.body].append(self.command.target)
-                battle.save()
+                if self.command.target not in battle.choices[self.command.body]:
+                    battle.choices[self.command.body].append(self.command.target)
+                    battle.save()
+                else:
+                    print "already voted"
             print 'adding vote for %s\'s vote for %s' % (self.command.target, self.command.body)
 
     def finalize(self):
@@ -128,8 +137,13 @@ if __name__ == '__main__':
         logging.info('connected to mongodb')
 
     while True:
-        t = StoredTweet.objects.first()
-
+        #t = StoredTweet.objects.first()
+        class Mock():
+            def delete(self):
+                pass
+        t = Mock()
+        t.body = '@ShowOfTweets remove #bot1'
+        t.user = 'BattleOfTweets'
         if t is not None:
             d = Decoder(t)
             w = Worker(d.command)
