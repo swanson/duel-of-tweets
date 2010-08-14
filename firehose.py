@@ -2,11 +2,7 @@
 from mongoengine import *
 import tweetstream
 from datetime import datetime
-
-class StoredTweet(Document):
-    user = StringField(required = True)
-    body = StringField(required = True)
-    timestamp = DateTimeField()
+from db.document import StoredTweet
 
 connect('tweet-store')
 words = ["@showoftweets", "bieber"]
