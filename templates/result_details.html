@@ -9,7 +9,7 @@
         <li>No one yet...</li>
     {% endif %}
     {% for vote in battle.choices[votes] %}        
-        <li><a href='http://twitter.com/{{vote}}'>{{ votes[vote] }}</a></li>
+        <li><a href='http://twitter.com/{{vote}}'>{{ vote }}</a></li>
     {% endfor %}
     </ul>
 {% endfor %}
