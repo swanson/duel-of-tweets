@@ -77,6 +77,10 @@ def post_duel():
         b = Battle(tag = form.tags.data, start = n, end = n + timedelta(minutes=form.time_limit.data), \
                 suggester = "someone", choices = c, active = True)
         b.save()
+        o = OutgoingTweet(body = "A new duel! %s vs %s - @reply me with the tag %s and your vote!" % \
+                (form.option1.data, form.option2.data, form.tags.data))
+        o.save()
+        
         return redirect('/results/%s' % b.id)
     return "invalid"
 

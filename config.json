@@ -1,9 +1,13 @@
 {
-"consumer_key" : "xxxxx",
-"consumer_secret" : "xxxxxx",
-"access_key" : "xxxxxx",
-"access_secret" : "xxxxxx",
-"user" : "xxxxx",
-"password" : "xxxxxxxxx"
+"consumer_key" : "SLSOvjcYYBnNZKTDOx3Dw",
+"consumer_secret" : "Hztiq8b8wVv2F2FLGvBzaqruknMDs5xtJDMYnLOLms",
+"access_key_frontend" : "178581757-rDvAj9U3YuURIqU0RhsSawNedZfQx17GNlv6PVjM",
+"access_secret_frontend" : "cFXBlNVVZrvqVx31R0o9I5QkCFnjcMrJTYSsLjDiw",
+"access_key_bot" : "178583513-Bj2WrAU00NDNnd4ieMvvPbISqnHOgPQo89MaC04",
+"access_secret_bot" : "aqDCg4x5OtybjjEe1f9GqqXFotGDkgtuLcwlkjP41Mg",
+"user_frontend" : "DuelOfTweets",
+"password_frontend" : "bronchopower",
+"user_bot" : "DuelOfTweetsBot",
+"password_bot" : "bronchopower"
 }
 

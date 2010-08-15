@@ -23,13 +23,13 @@ class Command(object):
     def to_tweet_string(self):
         mention = '@%s' % self.target
         if self.cmd_type == 'results':
-            template = "%s Current results for %s: %s" % (mention, self.tag, self.body)
+            template = "%s Current results for %s: %s. Smashing!" % (mention, self.tag, self.body)
         elif self.cmd_type == 'remove':
-            template = "%s Your vote for %s has been removed" % (mention, self.tag)
+            template = "%s Your vote for %s has been removed." % (mention, self.tag)
         elif self.cmd_type == 'suggest':
-            template = "%s thanks for the suggestion!" % (mention)
+            template = "%s Thanks for the suggestion!" % (mention)
         else:
-            template = "%s we received your vote for %s" % (mention, self.body)
+            template = "%s We received your vote for %s.  Good show!" % (mention, self.body)
         if len(template) < 140:
             return template
         else:
@@ -68,7 +68,7 @@ class Worker(object):
                     logging.info('removing %s\'s vote' % self.command.target)
                     return True
         elif self.command.cmd_type == 'suggest':
-            choices = self.command.body.split(' or ')
+            choices = self.command.body.split(' vs ')
             if len(choices) != 2:
                 logging.warn("suggestion '%s' couldn't be decoded!" % self.command.body)
                 return False
@@ -82,7 +82,7 @@ class Worker(object):
         else:
             try:
                 battle = Battle.objects.get(tag = self.command.tag)
-             except:
+            except:
                 logging.warn("tag %s did not match any known duels" % self.command.tag)
                 return False
             if not battle.active:

@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
                 # announce results to frontend
                 OutgoingTweet(
-                    body="The results are in! %s won with %d votes out of %d" % (
+                    body="The results are in! \"%s\" won with %d votes out of %d" % (
                         max_choice,
                         max_votes,
                         total_votes
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                         # these are the winners
                         for voter in voters:
                             OutgoingTweet(
-                                body="@%s Congrats! Your pick, %s, won with %d/%d votes!" % (
+                                body="@%s Congrats! Your pick, \"%s\", won with %d/%d votes! Follow @DuelOfTweets to find out about more duels!" % (
                                     voter,
                                     choice,
                                     num_votes,
@@ -71,7 +71,7 @@ if __name__ == "__main__":
                         # these are the losers
                         for voter in voters:
                             OutgoingTweet(
-                                body="@%s Sorry! Your pick, %s, won with %d/%d votes!" % (
+                                body="@%s Sorry! Your pick, \"%s\", lost with %d/%d votes! Follow @DuelOfTweets to find out about more duels!" % (
                                     voter,
                                     choice,
                                     num_votes,
