@@ -4,7 +4,7 @@ from wtforms import TextField, IntegerField, Form, validators
 class BattleForm(Form):
     option1 = TextField("", [validators.Required()])
     option2 = TextField("", [validators.Required()])
-    tag = TextField("Tags")
+    tags = TextField("Tags")
     time_limit = IntegerField("", [validators.Required()])
 
 class StoredTweet(Document):
