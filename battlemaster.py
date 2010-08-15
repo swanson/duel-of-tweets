@@ -35,7 +35,7 @@ class Command(object):
             raise Exception("Too long too tweet")
 
     def dispatch(self):
-        outgoing = OutgoingTweet(body = self.to_tweet_string(), timestamp = datetime.now())
+        outgoing = OutgoingTweet(body = self.to_tweet_string(), timestamp = datetime.now(), bot=True)
         outgoing.save()
 
 class Worker(object):
@@ -119,7 +119,7 @@ class Decoder(object):
         return tags
     
     def validate_hashtag_format(self, tag):
-        valid = re.findall('#BOT[0-9]+', tag, re.I)
+        valid = re.findall('#DoT[0-9]+', tag, re.I)
         if valid:
             return True
         return False
@@ -151,20 +151,21 @@ if __name__ == '__main__':
 
     debug = True
     while True and debug:
-        #t = StoredTweet.objects.first()
-        class Mock():
-            def delete(self):
-                pass
-        t = Mock()
-        t.body = '@ShowOfTweets suggest justin beiber or justin timberlake'
-        t.user = 'BattleOfTweets'
+        t = StoredTweet.objects.first()
+        #class Mock():
+        #    def delete(self):
+        #        pass
+        #t = Mock()
+        #t.body = '@ShowOfTweets suggest justin beiber or justin timberlake'
+        #t.user = 'BattleOfTweets'
         if t is not None:
             d = Decoder(t)
             w = Worker(d.command)
             if w.do_work():
                 d.command.dispatch()
             t.delete()
-            debug = False
+            #debug = False
+
 
         # don't overload mongodb
         time.sleep(0.05)

@@ -23,7 +23,6 @@ class Battle(Document):
     def __str__(self):
         c = []
         v = []
-        print self.choices
         for choice in self.choices:
             c.append(choice)
             v.append(len(self.choices[choice]))
@@ -32,6 +31,7 @@ class Battle(Document):
 class OutgoingTweet(Document):
     body = StringField(required = True)
     timestamp = DateTimeField()
+    bot = BooleanField(required = True, default = False)
 
 class Suggestion(Document):
     user = StringField(required = True)

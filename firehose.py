@@ -29,8 +29,8 @@ if __name__ == "__main__":
     else:
         logging.info('connected to mongodb')
 
-    words = ["@showoftweets"]
-    stream = tweetstream.TrackStream(config['user'], config['password'], words)
+    words = [config['user_frontend'], config['user_bot']]
+    stream = tweetstream.TrackStream(config['user_frontend'], config['password_frontend'], words)
 
     for tweet in stream:
         logging.debug("Storing tweet %s" % tweet['text'])

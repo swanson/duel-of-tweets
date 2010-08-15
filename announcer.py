@@ -61,8 +61,11 @@ if __name__ == "__main__":
         logging.critical('couldnt open config!')
         sys.exit(-1)
 
-    announcer = Announcer(config['consumer_key'], config['consumer_secret'],
-        config['access_key'], config['access_secret'])
+    announcer_frontend = Announcer(config['consumer_key'], config['consumer_secret'],
+        config['access_key_frontend'], config['access_secret_frontend'])
+    
+    announcer_bot = Announcer(config['consumer_key'], config['consumer_secret'],
+        config['access_key_bot'], config['access_secret_bot'])
 
 
     # connect to mongodb
@@ -80,10 +83,15 @@ if __name__ == "__main__":
         tweet = OutgoingTweet.objects.first()
         if tweet is not None:
             # found a tweet, try and send it
-            if not announcer.tweet(tweet.body):
-                logging.debug('failed to tweet!')
+            if not tweet.bot:
+                if not announcer_frontend.tweet(tweet.body):
+                    logging.debug('failed to tweet to frontend!')
+            else:
+                if not announcer_bot.tweet(tweet.body):
+                    logging.debug('failed to tweet to bot!')
             # found tweet, sent it, so get rid of it
             tweet.delete()
+
         # dont piss of twitter, throttle
         time.sleep(1)
     
