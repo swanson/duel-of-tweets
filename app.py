@@ -1,6 +1,6 @@
 from flask import Flask, g, session, request, render_template, flash, redirect, url_for, jsonify
 from mongoengine import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from db.document import *
 
@@ -42,9 +42,16 @@ def index():
 def suggestions():
     return render_template('suggestions.html', suggestions = Suggestion.objects)
 
+@app.route('/create/<id>/', methods = ["GET"])
+def create_from_suggestion(id):
+    s = Suggestion.objects.get(id = id)
+    form = BattleForm(option1 = s.choices[0], option2 = s.choices[1], submitter = s.user)
+    return render_template('create.html', form=form)
+
 @app.route('/create/')
 def create():
-    return render_template('create.html')
+    form = BattleForm()
+    return render_template('create.html', form=form)
 
 @app.route('/results/')
 def results():
@@ -62,18 +69,16 @@ def status():
 
 @app.route('/posts/duel/', methods = ['POST'])
 def post_duel():
-    return "post duel"
-    comment_form = CommentForm(request.form)
-    if g.user and comment_form.validate():
-        question = Question.objects.get(id = id)
-        new_comment = Comment(body = comment_form.comment_body.data, author = g.user)
-        new_comment.save()
-        question.comments.append(new_comment)
-        question.save()
-        return redirect('/questions/%s' % id) #avoid double POSTs
-    else:
-        #add error handling
-        return redirect('/questions/%s' % id) #avoid double POSTs
+    form = BattleForm(request.form)
+    print form.option1.data, form.option2.data, form.tags.data, form.time_limit.data
+    if form.validate():
+        c = {form.option1.data.strip():[], form.option2.data.strip():[]}
+        n = datetime.now()
+        b = Battle(tag = form.tags.data, start = n, end = n + timedelta(minutes=form.time_limit.data), \
+                suggester = "someone", choices = c, active = True)
+        b.save()
+        return redirect('/results/%s' % b.id)
+    return "invalid"
 
 if __name__ == '__main__':
     connect('tweet-store')

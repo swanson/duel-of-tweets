@@ -166,7 +166,6 @@ if __name__ == '__main__':
             t.delete()
             #debug = False
 
-
         # don't overload mongodb
         time.sleep(0.05)
 
