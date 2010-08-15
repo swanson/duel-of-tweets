@@ -151,20 +151,20 @@ if __name__ == '__main__':
 
     debug = True
     while True and debug:
-        #t = StoredTweet.objects.first()
-        class Mock():
-            def delete(self):
-                pass
-        t = Mock()
-        t.body = '@ShowOfTweets suggest justin beiber or justin timberlake'
-        t.user = 'BattleOfTweets'
+        t = StoredTweet.objects.first()
+        #class Mock():
+        #    def delete(self):
+        #        pass
+        #t = Mock()
+        #t.body = '@ShowOfTweets suggest justin beiber or justin timberlake'
+        #t.user = 'BattleOfTweets'
         if t is not None:
             d = Decoder(t)
             w = Worker(d.command)
             if w.do_work():
                 d.command.dispatch()
             t.delete()
-            debug = False
+         #   debug = False
 
         # don't overload mongodb
         time.sleep(0.05)

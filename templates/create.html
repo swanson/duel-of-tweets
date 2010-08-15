@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-<form action="/posts/duel/" method="post" 
-                    style="float:left; width:100%;">
-                    <textarea id="option1"></textarea>
-                    <textarea id="option2"></textarea>
-                    <textarea id="tags"></textarea>
-                    <textarea id="time_limit"></textarea>
-                    <input class="comment-button" type="submit" value="Go"/>
+<form action="/posts/duel/" method="post" style="float:left; width:100%;">
+    <p>Combatants</p> </br>
+    <textarea id="option1"></textarea> </br>
+    <p>vs.</p> </br>
+    <textarea id="option2"></textarea> </br>
+    </br>
+    <p>Tags</p>
+    <textarea id="tags"></textarea> </br>
+    
+    <p>Time Limit</p> </br>
+    <textarea id="time_limit"></textarea></br>
+    <input style="float:left;" type="submit" value="Go"/>
 </form>
 {% endblock %}
