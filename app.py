@@ -41,7 +41,7 @@ def index():
 
 @app.route('/suggestions/')
 def suggestions():
-    return "suggestions"
+    return render_template('suggestions.html', suggestions = Suggestion.objects)
 
 @app.route('/create/')
 def create():

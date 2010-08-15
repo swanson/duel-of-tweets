@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<ul>
+{% for s in suggestions %}
+    <li><a href='#'>{{ s }} {{ s.timestamp | timesince }} </a></li>
+{% endfor %}
+</ul>
+{% endblock %}

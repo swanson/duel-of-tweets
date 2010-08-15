@@ -149,7 +149,8 @@ if __name__ == '__main__':
     else:
         logging.info('connected to mongodb')
 
-    while True:
+    debug = True
+    while True and debug:
         #t = StoredTweet.objects.first()
         class Mock():
             def delete(self):
@@ -163,6 +164,7 @@ if __name__ == '__main__':
             if w.do_work():
                 d.command.dispatch()
             t.delete()
+            debug = False
 
         # don't overload mongodb
         time.sleep(0.05)
