@@ -15,7 +15,7 @@
 	}
 	a:hover {
 		color:#fff;
-		background:#369;
+		background:#000;
 		text-decoration:none;
 	}
 	h1, h2, h3 {
@@ -68,7 +68,7 @@
 		margin:0 0 0 1px;
 		padding:3px 10px;
 		text-align:center;
-		background:#eee;
+		background:#fff;
 		color:#000;
 		text-decoration:none;
 		position:relative;
@@ -76,7 +76,7 @@
 		line-height:1.3em;
 	}
 	#header ul li a:hover {
-		background:#369;
+		background:#000;
 		color:#fff;
 	}
 	#header ul li a.active,
@@ -142,7 +142,33 @@
 	}
 
     textarea {
-        float:left;
-        width:100%;
+        width:75%;
         font-size:300%;
+        height:40px;
+    }
+
+    input {
+        border-bottom-color:#000;
+        border-bottom-style:solid;
+        border-bottom-width:1px;
+        border-left-color:#000;
+        border-left-style:solid;
+        border-left-width:1px;
+        border-right-color:#000;
+        border-right-style:solid;
+        border-right-width:1px;
+        border-top-color:#000;
+        border-top-style:solid;
+        border-top-width:1px;
+        font-weight:bold;
+        margin-bottom:3px;
+        margin-right:3px;
+        margin-top:30px;
+        padding-bottom:5px;
+        padding-left:5px;
+        padding-right:5px;
+        padding-top:5px;
+        background-color:#000;
+        color:#ffffff;
+        font-size:30px;
     }

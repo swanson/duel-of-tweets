@@ -2,32 +2,36 @@
   'http://www.w3.org/TR/html4/strict.dtd'>
 <html>
   <head>
-      <title>Title Goes Here</title>
-
-      <script type="text/javascript" src="/static/jquery-1.4.2.js"></script>
-
+      <title>Duel of Tweets - a gentlemenly approach to opinions</title>
       <link rel="stylesheet" href="/static/styles.css" type="text/css">
-
   </head>
   <body>
-  <div id="header">
-	<h1>Page title</h1>
-	<ul>
+
+      <div id="header">
+    BANNER GOES HERE  
+    <ul>
         <li><a href="/suggestions/">suggestions</a></li>
         <li><a href="/create/">create</a></li>
         <li><a href="/results/">results</a></li>
-        <!--<li><a href="/status/">status</a></li> -->
 	</ul>
 </div>
 <div class="colmask fullpage">
 	<div class="col1">
-		<!-- Column 1 start -->
         {% block content %}{% endblock %}
-		<!-- Column 1 end -->
 	</div>
 </div>
-<div id="footer">
-Footer goes here
+      <a href="http://github.com/swanson/duel-of-tweets"><img style="position: absolute; top: 0; right: 0; border: 0;" 
+          src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>  
+      <div id="footer">
+          <center>
+    This app is powered by <a href="http://www.python.org/">Python</a> and the 
+    <a href="http://dev.twitter.com/">Twitter API</a>, using the
+    <a href="http://flask.pocoo.org/">Flask</a> micro-framework and a
+    <a href="http://www.mongodb.org/">MongoDB</a> backend.
+    <br />
+    <br />
+    Created by Team DinoSorbet in under 36 hours for <a href="http://hackathonia.com/Events/Social-Dev-Camp-Chicago-2010-Hackathon">SocialDevCamp Chicago 2010 Hackathon</a>.
+</center>
 </div>
 
 </body>

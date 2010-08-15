@@ -6,6 +6,7 @@ from mongoengine import *
 import logging
 import time
 import sys
+import difflib
 
 #remove mentions
 #grab hashtags
@@ -41,22 +42,31 @@ class Command(object):
 class Worker(object):
     def __init__(self, command):
         self.command = command
+        self.command.body = self.command.body.lower().strip()
 
     def do_work(self):
         if self.command.cmd_type == 'results':
-            battle = Battle.objects.get(tag = self.command.tag)
+            try:
+                battle = Battle.objects.get(tag = self.command.tag)
+            except:
+                logging.warn("tag %s did not match any known duels" % self.command.tag)
+                return False
             res = []
             for b in battle.choices:
                 res.append('%s - %s' % (b, len(battle.choices[b])))
             self.command.body = ", ".join(res)
         elif self.command.cmd_type == 'remove':
-            battle = Battle.objects.get(tag = self.command.tag)
+            try:
+                battle = Battle.objects.get(tag = self.command.tag)
+            except:
+                logging.warn("tag %s did not match any known duels" % self.command.tag)
+                return False
             for c in battle.choices:
                 if self.command.target in battle.choices[c]:
                     battle.choices[c].remove(self.command.target)
                     battle.save()
-                    print 'removing %s\'s vote' % self.command.target
-                    break
+                    logging.info('removing %s\'s vote' % self.command.target)
+                    return True
         elif self.command.cmd_type == 'suggest':
             choices = self.command.body.split(' or ')
             if len(choices) != 2:
@@ -67,24 +77,32 @@ class Worker(object):
             s = Suggestion()
             s.user = self.command.target
             s.timestamp = datetime.now()
-            s.choices = self.command.body.split(' or ')
+            s.choices = self.command.body.split(' vs ')
             s.save()
         else:
-            battle = Battle.objects.get(tag = self.command.tag)
-            if not battle.active:
-                print 'battle has ended, you cannot vote anymore'
+            try:
+                battle = Battle.objects.get(tag = self.command.tag)
+             except:
+                logging.warn("tag %s did not match any known duels" % self.command.tag)
                 return False
-            if self.command.body in battle.choices:
-                if self.command.target not in battle.choices[self.command.body]:
-                    battle.choices[self.command.body].append(self.command.target)
+            if not battle.active:
+                logging.warn('battle has ended, you cannot vote anymore')
+                return False
+            
+            #use diff lib to try to do fuzzy string matching
+            closest = difflib.get_close_matches(self.command.body, battle.choices, n = 1)
+            if len(closest) < 1:
+                logging.warn('Could not match vote with any values')
+                return False
+            else:
+                if self.command.target not in battle.choices[closest[0]]:
+                    battle.choices[closest[0]].append(self.command.target)
                     battle.save()
+                    logging.info('adding vote for %s\'s vote for %s' % (self.command.target, self.command.body))
                 else:
-                    print "already voted"
-            print 'adding vote for %s\'s vote for %s' % (self.command.target, self.command.body)
+                    logging.warn('already voted')
+                    return False
         return True
-
-    def finalize(self):
-        pass
 
 class Decoder(object):
     def __init__(self, raw_tweet):
