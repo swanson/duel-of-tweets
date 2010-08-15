@@ -137,7 +137,7 @@ class Decoder(object):
         return tags
     
     def validate_hashtag_format(self, tag):
-        valid = re.findall('#DoT[0-9]+', tag, re.I)
+        valid = re.findall('#duel[0-9]+', tag, re.I)
         if valid:
             return True
         return False

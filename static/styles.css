@@ -48,6 +48,10 @@
 		padding:.4em 15px 0 15px;
 		margin:0;
 	}
+    #header center a
+    {
+
+    }
 	#header ul {
 		clear:left;
 		float:left;
