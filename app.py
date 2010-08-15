@@ -28,8 +28,7 @@ def timesince(dt, default="just now"):
         (diff.seconds, "second", "seconds"),
     )
 
-    for period, singular, plural in periods:
-        
+    for period, singular, plural in periods:        
         if period:
             return "%d %s ago" % (period, singular if period == 1 else plural)
 
@@ -52,8 +51,9 @@ def results():
     battles = Battle.objects
     return render_template('results.html', battles = battles)
 
-@app.route('/results/<id>')
+@app.route('/results/<id>/')
 def result_details(id):
+    battle = Battle.objects.get(id = id)
     return "results for %s" % id
 
 @app.route('/status/')
