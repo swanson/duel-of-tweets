@@ -48,9 +48,9 @@
 		padding:.4em 15px 0 15px;
 		margin:0;
 	}
-    #header center a
+    #logo a:hover
     {
-
+        background: None;
     }
 	#header ul {
 		clear:left;
