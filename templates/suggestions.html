@@ -2,7 +2,7 @@
 {% block content %}
 <ul>
 {% for s in suggestions %}
-    <li>{{ s }} {{ s.timestamp | timesince }} <a href="#">Create this duel</a></li>
+<li>{{ s }} {{ s.timestamp | timesince }} <a href="/create/{{s.id}}/">Create this duel</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

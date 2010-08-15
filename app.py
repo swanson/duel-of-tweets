@@ -42,6 +42,12 @@ def index():
 def suggestions():
     return render_template('suggestions.html', suggestions = Suggestion.objects)
 
+@app.route('/create/<id>/', methods = ["GET"])
+def create_from_suggestion(id):
+    s = Suggestion.objects.get(id = id)
+    form = BattleForm(option1 = s.choices[0], option2 = s.choices[1], submitter = s.user)
+    return render_template('create.html', form=form)
+
 @app.route('/create/')
 def create():
     form = BattleForm()
