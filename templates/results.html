@@ -2,7 +2,7 @@
 {% block content %}
 <ul>
 {% for b in battles %}
-    <li><a href='/results/{{b.id}}/'>{{b.tag}} {{b.choices.keys()}}</a></li>
+    <li><a href='/results/{{b.id}}/'>{{b}}</a></li>
 {% endfor %}
 </ul>
 {% endblock %}

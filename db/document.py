@@ -20,6 +20,15 @@ class Battle(Document):
     choices = DictField()
     active = BooleanField(required = True, default = False)
 
+    def __str__(self):
+        c = []
+        v = []
+        print self.choices
+        for choice in self.choices:
+            c.append(choice)
+            v.append(len(self.choices[choice]))
+        return 'Duel %s: %s (%s) vs %s (%s)' % (self.tag, c[0], v[0], c[1], v[1]) 
+
 class OutgoingTweet(Document):
     body = StringField(required = True)
     timestamp = DateTimeField()

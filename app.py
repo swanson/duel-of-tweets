@@ -54,7 +54,7 @@ def results():
 @app.route('/results/<id>/')
 def result_details(id):
     battle = Battle.objects.get(id = id)
-    return "results for %s" % id
+    return render_template('result_details.html', battle = battle)
 
 @app.route('/status/')
 def status():

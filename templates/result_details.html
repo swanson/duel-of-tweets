@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1> Results for {{battle.tag}} </h1>
+<h2> Time remaining: TODO </h2>
+{% for votes in battle.choices %}
+    Voters supporting {{ votes }} ({{ battle.choices[votes] | length }}): </br>
+    <ul>
+    {% if battle.choices[votes]|length < 1 %}
+        <li>No one yet...</li>
+    {% endif %}
+    {% for vote in battle.choices[votes] %}        
+        <li><a href='http://twitter.com/{{vote}}'>{{ votes[vote] }}</a></li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+{% endblock %}
